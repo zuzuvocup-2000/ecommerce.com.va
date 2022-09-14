@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Api\ProductCatalogueController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,8 +39,19 @@ Route::group([
     'prefix' => 'brand'
 ], function ($router) {
     Route::get('/brand/list', [BrandController::class, 'list']);
-    Route::get('/brand/index', [BrandController::class, 'index']);
+    Route::get('/brand/index/{id}', [BrandController::class, 'index'])->where(['id' => '[0-9]+']);
     Route::post('/brand/store', [BrandController::class, 'store']);
-    Route::post('/brand/update', [BrandController::class, 'update']);
-    Route::post('/brand/delete', [BrandController::class, 'delete']);
+    Route::post('/brand/update/{id}', [BrandController::class, 'update'])->where(['id' => '[0-9]+']);
+    Route::post('/brand/destroy/{id}', [BrandController::class, 'destroy'])->where(['id' => '[0-9]+']);
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'product'
+], function ($router) {
+    Route::get('/catalogue/list', [ProductCatalogueController::class, 'list']);
+    Route::get('/catalogue/index/{id}', [ProductCatalogueController::class, 'index'])->where(['id' => '[0-9]+']);
+    Route::post('/catalogue/store', [ProductCatalogueController::class, 'store']);
+    Route::post('/catalogue/update/{id}', [ProductCatalogueController::class, 'update'])->where(['id' => '[0-9]+']);
+    Route::post('/catalogue/destroy/{id}', [ProductCatalogueController::class, 'destroy'])->where(['id' => '[0-9]+']);
 });

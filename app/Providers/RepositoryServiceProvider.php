@@ -14,6 +14,8 @@ class RepositoryServiceProvider extends ServiceProvider
 
     public $bindings = [
         'App\Repositories\Interfaces\BrandRepositoryInterface' => 'App\Repositories\BrandRepository',
+        'App\Repositories\Interfaces\ProductCatalogueRepositoryInterface' => 'App\Repositories\ProductCatalogueRepository',
+        'App\Repositories\Interfaces\RoutesRepositoryInterface' => 'App\Repositories\RoutesRepository',
     ];
 
    public function register()

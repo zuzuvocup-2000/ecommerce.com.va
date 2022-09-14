@@ -3,22 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
+use App\Models\ProductCatalogue;
 use App\Models\Routes;
 use Illuminate\Http\Request;
-use App\Services\Interfaces\BrandServiceInterface;
-use App\Repositories\Interfaces\BrandRepositoryInterface as BrandRepository;
+use App\Services\Interfaces\ProductCatalogueServiceInterface;
+use App\Repositories\Interfaces\ProductCatalogueRepositoryInterface as ProductCatalogueRepository;
 use Validator;
 use Illuminate\Support\Str;
 
 
-class BrandController extends Controller
+class ProductCatalogueController extends Controller
 {
-    protected $brandRepository;
-    protected $brandService;
-    public function __construct(BrandServiceInterface $brandService, BrandRepository $brandRepository){
-        $this->brandService = $brandService;
-        $this->brandRepository = $brandRepository;
+    protected $productCatalogueRepository;
+    protected $productCatalogueService;
+    public function __construct(
+        ProductCatalogueServiceInterface $productCatalogueService, 
+        ProductCatalogueRepository $productCatalogueRepository
+    ){
+        $this->productCatalogueService = $productCatalogueService;
+        $this->productCatalogueRepository = $productCatalogueRepository;
     }
     /**
      * Display a listing of the resource.
@@ -27,17 +30,17 @@ class BrandController extends Controller
      */
     public function list(Request $request)
     {
-        $brand = $this->brandService->getList($request);
+        $productCatalogue = $this->productCatalogueService->getList($request);
         return response()->json([
-            'brand' => $brand
+            'product_catalogue' => $productCatalogue
         ], 200);
     }
 
     public function index(Request $request, $id)
     {
-        $brand = $this->brandRepository->findById($id);
+        $productCatalogue = $this->productCatalogueRepository->findById($id);
         return response()->json([
-            'brand' => $brand
+            'product_catalogue' => $productCatalogue
         ], 200);
     }
 
@@ -48,23 +51,22 @@ class BrandController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         $data = $request->all();
         $data['canonical'] = Str::slug($data['canonical'], '-');
         $validator = Validator::make($data, [
             'name' => 'required|string|max:255',
-            'keyword' => 'required|string|max:255',
             'canonical' => 'required|unique:routes,canonical',
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $brand = $this->brandService->create($request);
-        if($brand){
+        $productCatalogue = $this->productCatalogueService->create($request);
+        if($productCatalogue){
             return response()->json([
-                'message' => 'Brand successfully created',
-                'brand' => $brand
+                'message' => 'Product catalogue successfully created',
+                'product_catalogue' => $productCatalogue
             ], 201);
         }else{
             return response()->json([
@@ -75,10 +77,10 @@ class BrandController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\ProductCatalogue  $productCatalogue
      * @return \Illuminate\Http\Response
      */
-    public function show(Brand $brand)
+    public function show(ProductCatalogue $productCatalogue)
     {
         
     }
@@ -87,7 +89,7 @@ class BrandController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\ProductCatalogue  $productCatalogue
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -96,16 +98,15 @@ class BrandController extends Controller
         $data['canonical'] = Str::slug($data['canonical'], '-');
         $validator = Validator::make($data, [
             'name' => 'required|string|max:255',
-            'keyword' => 'required|string|max:255',
-            'canonical' => 'required|unique:routes,canonical,'.$request->id.',objectid,module,brands',
+            'canonical' => 'required|unique:routes,canonical,'.$request->id.',objectid,module,products_catalogue',
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
         }
-        $brand = $this->brandService->update($id, $request);
-        if($brand > 0){
+        $productCatalogue = $this->productCatalogueService->update($id, $request);
+        if($productCatalogue > 0){
             return response()->json([
-                'message' => 'Brand successfully updated',
+                'message' => 'Product catalogue successfully updated',
             ], 200);
         }else{
             return response()->json([
@@ -117,15 +118,15 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\ProductCatalogue  $productCatalogue
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $brand = $this->brandService->delete($id);
-        if($brand > 0){
+        $productCatalogue = $this->productCatalogueService->delete($id);
+        if($productCatalogue > 0){
             return response()->json([
-                'message' => 'Brand successfully deleted',
+                'message' => 'Product catalogue successfully deleted',
             ], 200);
         }else{
             return response()->json([

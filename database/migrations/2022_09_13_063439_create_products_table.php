@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('brand_id');
+            $table->unsignedBigInteger('brand_id')->default(0);
             $table->unsignedBigInteger('catalogue_id');
             $table->string('name');
-            $table->decimal('price');
-            $table->decimal('price_promotion');
-            $table->longText('description');
+            $table->decimal('price')->default(0);
+            $table->decimal('price_promotion')->default(0);
+            $table->longText('description')->nullable();
             $table->text('canonical');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->default(0);
             $table->timestamps();
         });
 

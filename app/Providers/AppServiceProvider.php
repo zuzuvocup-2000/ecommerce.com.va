@@ -13,6 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public $bindings = [
         'App\Services\Interfaces\BrandServiceInterface' => 'App\Services\BrandService',
+        'App\Services\Interfaces\ProductCatalogueServiceInterface' => 'App\Services\ProductCatalogueService',
     ];
 
     public function register()

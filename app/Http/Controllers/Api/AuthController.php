@@ -127,8 +127,8 @@ class AuthController extends Controller
         $userId = auth()->user()->id;
 
         $user = User::where('id', $userId)->update(
-                    ['password' => bcrypt($request->new_password)]
-                );
+            ['password' => bcrypt($request->new_password)]
+        );
 
         return response()->json([
             'message' => 'User successfully changed password',
