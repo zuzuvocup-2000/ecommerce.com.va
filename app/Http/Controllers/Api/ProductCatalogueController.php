@@ -98,7 +98,7 @@ class ProductCatalogueController extends Controller
         $data['canonical'] = Str::slug($data['canonical'], '-');
         $validator = Validator::make($data, [
             'name' => 'required|string|max:255',
-            'canonical' => 'required|unique:routes,canonical,'.$request->id.',objectid,module,products_catalogue',
+            'canonical' => 'required|unique:routes,canonical,'.$request->id.',object_id,module,products_catalogue',
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);

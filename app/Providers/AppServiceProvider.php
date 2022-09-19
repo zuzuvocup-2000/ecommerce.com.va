@@ -12,7 +12,9 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public $bindings = [
+        'App\Services\Interfaces\UserServiceInterface' => 'App\Services\UserService',
         'App\Services\Interfaces\BrandServiceInterface' => 'App\Services\BrandService',
+        'App\Services\Interfaces\AuthServiceInterface' => 'App\Services\AuthService',
         'App\Services\Interfaces\ProductCatalogueServiceInterface' => 'App\Services\ProductCatalogueService',
     ];
 

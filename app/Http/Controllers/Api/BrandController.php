@@ -72,16 +72,6 @@ class BrandController extends Controller
             ], 400);
         }
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Brand  $brand
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Brand $brand)
-    {
-        
-    }
 
     /**
      * Update the specified resource in storage.
@@ -97,7 +87,7 @@ class BrandController extends Controller
         $validator = Validator::make($data, [
             'name' => 'required|string|max:255',
             'keyword' => 'required|string|max:255',
-            'canonical' => 'required|unique:routes,canonical,'.$request->id.',objectid,module,brands',
+            'canonical' => 'required|unique:routes,canonical,'.$request->id.',object_id,module,brands',
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);

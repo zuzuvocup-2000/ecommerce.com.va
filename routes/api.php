@@ -20,11 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::group([
-    'middleware' => 'api',
-    'prefix' => 'auth'
-], function ($router) {
+Route::group(['middleware' => ['auth:api'],'prefix' => 'auth'], function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -33,6 +29,16 @@ Route::group([
     Route::post('/change-pass', [AuthController::class, 'changePassWord']);    
 });
 
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'user'
+], function ($router) {
+    Route::get('/user/list', [UserController::class, 'list']);
+    Route::get('/user/index/{id}', [UserController::class, 'index'])->where(['id' => '[0-9]+']);
+    Route::post('/user/store', [UserController::class, 'store']);
+    Route::post('/user/update/{id}', [UserController::class, 'update'])->where(['id' => '[0-9]+']);
+    Route::post('/user/destroy/{id}', [UserController::class, 'destroy'])->where(['id' => '[0-9]+']);
+});
 
 Route::group([
     'middleware' => 'api',

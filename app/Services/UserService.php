@@ -2,37 +2,37 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\BrandServiceInterface;
-use App\Repositories\Interfaces\BrandRepositoryInterface as BrandRepository;
+use App\Services\Interfaces\UserServiceInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 use App\Repositories\Interfaces\RoutesRepositoryInterface as RoutesRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Models\Brand;
+use App\Models\User;
 use App\Models\Routes;
 use Illuminate\Support\Str;
 
 /**
- * Class BrandService
+ * Class UserService
  * @package App\Services
  */
-class BrandService implements BrandServiceInterface
+class UserService implements UserServiceInterface
 {
 
-    public $brandRepository;
+    public $userRepository;
     public $routesRepository;
 
     public function __construct(
-        BrandRepository $brandRepository,
+        UserRepository $userRepository,
         RoutesRepository $routesRepository,
     ){
         $this->routesRepository = $routesRepository;
-        $this->brandRepository = $brandRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function getList($request){
         $perpage = $request->input('perpage') ?? 20;
-        $brand = $this->brandRepository->paginateBrand($perpage);
-        return $brand;
+        $user = $this->userRepository->paginateUser($perpage);
+        return $user;
     }
 
     public function create($request){
@@ -41,16 +41,16 @@ class BrandService implements BrandServiceInterface
         try{
             $insert = $request->all();
             $insert['canonical'] = Str::slug($insert['canonical'], '-');
-            $brand = $this->brandRepository->create($insert);
+            $user = $this->userRepository->create($insert);
 
             $routes_insert = [
-                'module' => 'brands',
-                'object_id' => $brand->id,
+                'module' => 'users',
+                'object_id' => $user->id,
                 'canonical' => $insert['canonical']
             ];
             $routes = $this->routesRepository->create($routes_insert);
             DB::commit();
-            return $brand;
+            return $user;
         }catch(\Exception $e ){
             DB::rollBack();
             // Log::error($e->getMessage());
@@ -63,12 +63,12 @@ class BrandService implements BrandServiceInterface
         DB::beginTransaction();
         try{
             $update = $request->except(['create']);
-            $brand = $this->brandRepository->update($id, $update);
+            $user = $this->userRepository->update($id, $update);
                 
             $routes_update = [
                 'canonical' => $update['canonical']
             ];
-            $routes = $this->routesRepository->updateByObjectId($id, 'brands', $routes_update);
+            $routes = $this->routesRepository->updateByObjectId($id, 'users', $routes_update);
             DB::commit();
             return true;
         }catch(\Exception $e ){
@@ -82,8 +82,8 @@ class BrandService implements BrandServiceInterface
     public function delete($id){
         DB::beginTransaction();
         try{
-            $brand = $this->brandRepository->deleteById($id);
-            $routes = $this->routesRepository->deleteByObjectId($id, 'brands');
+            $user = $this->userRepository->deleteById($id);
+            $routes = $this->routesRepository->deleteByObjectId($id, 'users');
 
             DB::commit();
             return true;

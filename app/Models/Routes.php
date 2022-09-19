@@ -10,7 +10,7 @@ class Routes extends Model
     use HasFactory;
 
     protected $fillable = [
-        'objectid',
+        'object_id',
         'canonical',
         'module',
     ];

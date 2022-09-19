@@ -13,17 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products_catalogue', function (Blueprint $table) {
+        Schema::create('products_relationship', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->longText('description')->nullable();
-            $table->text('canonical');
-            $table->unsignedBigInteger('user_id')->default(0);
-            $table->timestamps();
-            $table->foreign('user_id')
+            $table->unsignedBigInteger('catalogue_id');
+            $table->unsignedBigInteger('object_id');
+            $table->foreign('catalogue_id')
                 ->references('id')
-                ->on('users')
+                ->on('products_catalogue')
                 ->onDelete('cascade');
+            $table->foreign('object_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('cascade');
+            
         });
     }
 
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products_catalogue');
+        //
     }
 };

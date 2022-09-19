@@ -13,19 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
+        Schema::create('brands_relationship', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('catalogue_id');
+            $table->unsignedBigInteger('object_id');
             $table->foreign('catalogue_id')
                 ->references('id')
                 ->on('products_catalogue')
                 ->onDelete('cascade');
-            $table->foreign('brand_id')
+            $table->foreign('object_id')
                 ->references('id')
-                ->on('brands')
+                ->on('products')
                 ->onDelete('cascade');
+            
         });
     }
 

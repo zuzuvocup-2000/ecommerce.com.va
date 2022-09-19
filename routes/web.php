@@ -21,3 +21,14 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // Route::get('/{url}', [App\Http\Controllers\BaseController::class, 'index'])->name('home');
+
+
+// Route::get('chat', function () {
+//     return view('chat');
+// });
+
+// Route::post('message', function (Request $request) {
+//     broadcast(new MessageSent(auth()->user(), $request->input('message')));
+
+//     return $request->input('message');
+// });

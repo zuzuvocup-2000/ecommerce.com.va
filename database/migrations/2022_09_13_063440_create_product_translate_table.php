@@ -13,20 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('products_translate', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('catalogue_id');
-            $table->text('catalogue')->nullable();
-            $table->unsignedBigInteger('brand_id')->default(0);
-            $table->decimal('price')->default(0);
-            $table->decimal('price_promotion')->default(0);
-            $table->text('image')->nullable();
-            $table->longtext('album')->nullable();
-            $table->unsignedBigInteger('viewed')->default(0);
-            $table->smallInteger('rate')->default(0);
-            $table->tinyInteger('hot')->default(0);
-            $table->tinyInteger('publish')->default(0);
-            $table->tinyInteger('trash')->default(0);
+            $table->unsignedBigInteger('object_id');
+            $table->string('language');
+            $table->text('name');
+            $table->longText('description')->nullable();
+            $table->longText('content')->nullable();
+            $table->text('meta_title');
+            $table->text('meta_description')->nullable();
+            $table->text('canonical');
             $table->timestamps();
             $table->unsignedBigInteger('user_id_created')->default(0);
             $table->unsignedBigInteger('user_id_updated')->default(0);
@@ -36,9 +32,9 @@ return new class extends Migration
             $table->foreign('user_id_updated')
                 ->references('id')
                 ->on('users');
-            $table->foreign('catalogue_id')
+            $table->foreign('object_id')
                 ->references('id')
-                ->on('products_catalogue')
+                ->on('products')
                 ->onDelete('cascade');
         });
     }
@@ -50,6 +46,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('products_translate');
     }
 };

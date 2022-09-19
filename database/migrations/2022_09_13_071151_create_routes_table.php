@@ -15,10 +15,13 @@ return new class extends Migration
     {
         Schema::create('routes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('objectid');
+            $table->unsignedBigInteger('object_id');
+            $table->string('language');
+            $table->string('module');
             $table->text('canonical');
-            $table->text('module');
             $table->timestamps();
+            $table->unsignedBigInteger('user_id_created')->default(0);
+            $table->unsignedBigInteger('user_id_updated')->default(0);
         });
     }
 

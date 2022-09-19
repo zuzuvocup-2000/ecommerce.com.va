@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Interfaces\AuthServiceInterface;
 use App\Models\User;
 use Validator;
 
@@ -16,8 +17,11 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct() {
+    protected $authService;
+
+    public function __construct(AuthServiceInterface $authService) {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->authService = $authService;
     }
 
     /**
@@ -53,16 +57,10 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:6',
         ]);
-
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
         }
-
-        $user = User::create(array_merge(
-            $validator->validated(),
-            ['password' => bcrypt($request->password)]
-        ));
-
+        $user = $this->authService->register($request);
         return response()->json([
             'message' => 'User successfully registered',
             'user' => $user
